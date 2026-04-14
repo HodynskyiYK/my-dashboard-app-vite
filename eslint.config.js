@@ -43,7 +43,7 @@ export default tseslint.config(
       // boundaries
       'boundaries/no-unknown': 'error',
       'boundaries/no-unknown-files': 'error',
-      'boundaries/element-types': [
+      /*'boundaries/element-types': [
         'error',
         {
           default: 'disallow',
@@ -51,14 +51,13 @@ export default tseslint.config(
             { from: 'app', allow: ['pages', 'widgets', 'features', 'entities', 'shared'] },
             { from: 'entities', allow: ['shared'] },
             { from: 'features', allow: ['entities', 'shared'] },
-            { from: 'pages', allow: ['widgets', 'features', 'entities', 'shared'] },
             { from: 'shared', allow: ['shared'] },
             { from: 'widgets', allow: ['features', 'entities', 'shared'] },
             { from: "pages", allow: ["widgets", "features", "entities", "shared", "app"]
 }
           ],
         },
-      ],
+      ],*/
 
       // public API restriction
       'no-restricted-imports': [

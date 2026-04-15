@@ -1,5 +1,8 @@
 import { Outlet } from "react-router-dom";
-import { Footer, Header, Sidebar } from "@/widgets";
+import { Header } from "@/widgets/header";
+import { Sidebar } from "@/widgets/sidebar";
+import { Footer } from "@/widgets/footer";
+
 
 export function MainLayout() {
 

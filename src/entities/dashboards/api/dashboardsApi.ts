@@ -2,7 +2,7 @@ import { baseApi } from "@/shared/api/baseApi";
 import type { Dashboard } from "@/entities/dashboards";
 
 
-const dashboardsApi = baseApi.injectEndpoints({
+const dashboardApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getDashboards: build.query<Dashboard[], void>({
             query: () => "/dashboards",
@@ -19,4 +19,4 @@ const dashboardsApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetDashboardsQuery, useCreateDashboardMutation } = dashboardsApi;
+export const { useGetDashboardsQuery, useCreateDashboardMutation } = dashboardApi;

@@ -11,6 +11,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.3.1(react@18.3.1)
+  react-router-dom:
+    specifier: ^7.14.1
+    version: 7.14.1(react-dom@18.3.1)(react@18.3.1)
 
 devDependencies:
   '@types/node':
@@ -22,6 +25,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.2.7
     version: 18.3.7(@types/react@18.3.28)
+  '@types/react-router-dom':
+    specifier: ^5.3.3
+    version: 5.3.3
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.0.0
     version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.9.3)
@@ -567,6 +573,10 @@ packages:
       '@babel/types': 7.29.0
     dev: true
 
+  /@types/history@4.7.11:
+    resolution: {integrity: sha1-VliLF66PUMU5g6Uk/DzEdDeWnWQ=}
+    dev: true
+
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha1-WWoXRyM2lNUPatinhp/Lb1bPWEE=}
     dev: true
@@ -586,6 +596,21 @@ packages:
     peerDependencies:
       '@types/react': ^18.0.0
     dependencies:
+      '@types/react': 18.3.28
+    dev: true
+
+  /@types/react-router-dom@5.3.3:
+    resolution: {integrity: sha1-6da0pm/NvWUaXxBsJlajAIjMHoM=}
+    dependencies:
+      '@types/history': 4.7.11
+      '@types/react': 18.3.28
+      '@types/react-router': 5.1.20
+    dev: true
+
+  /@types/react-router@5.1.20:
+    resolution: {integrity: sha1-iOzKoSKoJAXvPvvKql3N2fAhOHw=}
+    dependencies:
+      '@types/history': 4.7.11
       '@types/react': 18.3.28
     dev: true
 
@@ -874,6 +899,11 @@ packages:
   /convert-source-map@2.0.0:
     resolution: {integrity: sha1-S1YPZJ/E6RjdCrdc9JYei8iC2Co=}
     dev: true
+
+  /cookie@1.1.1:
+    resolution: {integrity: sha1-O7m9/II2nbnC9pyTycPOsxDIizw=}
+    engines: {node: '>=18'}
+    dev: false
 
   /cross-spawn@7.0.6:
     resolution: {integrity: sha1-ilj+ePANzXDDcEUXWd+/rwPo7p8=}
@@ -1487,6 +1517,34 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /react-router-dom@7.14.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha1-Hq1QB/iUi26ubfhOlcwQmRGtXXw=}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-router: 7.14.1(react-dom@18.3.1)(react@18.3.1)
+    dev: false
+
+  /react-router@7.14.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha1-rfYOWHrX+yW9jzPEQ/sOhs1PBR4=}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+    dependencies:
+      cookie: 1.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      set-cookie-parser: 2.7.2
+    dev: false
+
   /react@18.3.1:
     resolution: {integrity: sha1-SauJIAnFOTNiW9FrJTP8dUyrKJE=}
     engines: {node: '>=0.10.0'}
@@ -1541,6 +1599,10 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dev: true
+
+  /set-cookie-parser@2.7.2:
+    resolution: {integrity: sha1-zNCGc6muXS5E6iot4lCJ5nx+32g=}
+    dev: false
 
   /shebang-command@2.0.0:
     resolution: {integrity: sha1-zNCvT4g1+9wmW4JGGq8MNmY/NOo=}

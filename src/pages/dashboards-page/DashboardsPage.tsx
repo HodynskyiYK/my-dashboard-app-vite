@@ -1,7 +1,7 @@
-import { useGetDashboardsQuery, type Dashboard } from "@/entities/dashboards";
+import { useGetDashboardsQuery } from "@/entities/dashboards";
 
 export function DashboardsPage() {
-    const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery({});
+    const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery();
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -11,11 +11,15 @@ export function DashboardsPage() {
         return <div>Error loading dashboards</div>;
     }
 
+    if (!dashboardsData || dashboardsData.length === 0) {
+        return <div>No dashboards found</div>;
+    }
+
     return (
         <div>
             <h1>Dashboards</h1>
             <ul>
-                {dashboardsData.map((dashboard: Dashboard) => (
+                {dashboardsData.map((dashboard) => (
                     <li key={dashboard.id}>{dashboard.title}</li>
                 ))}
             </ul>

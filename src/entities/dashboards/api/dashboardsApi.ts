@@ -1,21 +1,20 @@
 import { baseApi } from "@/shared/api/baseApi";
+import type { Dashboard } from "@/entities/dashboards";
 
 
-const dashboardsApi = baseApi.enhanceEndpoints({
-    addTagTypes: ["Dashboards"],
-}).injectEndpoints({
+const dashboardsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getDashboards: build.query({
+        getDashboards: build.query<Dashboard[], void>({
             query: () => "/dashboards",
-            providesTags: [{ type: "Dashboards" }],
+            providesTags: [{ type: "Dashboard" }],
         }),
-        createDashboard: build.mutation({
+        createDashboard: build.mutation<Dashboard, Partial<Dashboard>>({
             query: (newDashboard) => ({
                 url: "/dashboards",
                 method: "POST",
                 body: newDashboard,
             }),
-            invalidatesTags: [{ type: "Dashboards" }],
+            invalidatesTags: [{ type: "Dashboard" }],
         }),
     }),
 });

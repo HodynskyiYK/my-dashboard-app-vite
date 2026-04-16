@@ -1,4 +1,5 @@
 import { useGetDashboardsQuery } from "@/entities/dashboards";
+import { CreateDashboardForm } from "@/features/create-dashboard";
 
 export function DashboardsPage() {
     const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery();
@@ -23,6 +24,8 @@ export function DashboardsPage() {
                     <li key={dashboard.id}>{dashboard.title}</li>
                 ))}
             </ul>
+            <hr />
+            <CreateDashboardForm />
         </div>
     );
 }

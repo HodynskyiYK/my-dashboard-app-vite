@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { set, useForm, type SubmitHandler } from "react-hook-form";
 import { createDashboardValidation, type ICreateDashboardFormValues } from "@/features/create-dashboard";
 import { useCreateDashboardMutation } from "@/entities/dashboards";
 import { SuccessMessage, ErrorMessage } from "@/shared/ui";
+import type { TCreateDashboardStatus } from "../model/types";
 
 export function CreateDashboardForm() {
-  const [isShowingSuccessMessage, setIsShowingSuccessMessage] = useState<boolean>(false);
-  const [isShowingErrorMessage, setIsShowingErrorMessage] = useState<boolean>(false);
-  const [createDashboard, { isLoading, reset: resetMutation }] = useCreateDashboardMutation();
+  const [status, setStatus] = useState<TCreateDashboardStatus>('idle');
+  const [createDashboard, { isLoading }] = useCreateDashboardMutation();
   const {
     register,
     handleSubmit,
@@ -15,40 +15,42 @@ export function CreateDashboardForm() {
     formState: { errors }
   } = useForm<ICreateDashboardFormValues>();
 
-
   const onSubmitHandler: SubmitHandler<ICreateDashboardFormValues> = async (data) => {
     try {
       await createDashboard(data).unwrap();
       reset();
-
-      setIsShowingSuccessMessage(true);
+      setStatus('success');
     } catch (error) {
-      setIsShowingErrorMessage(true);
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        setIsShowingSuccessMessage(false);
-        setIsShowingErrorMessage(false);
-        resetMutation();
-      }, 2500);
+      setStatus('error');
     }
   };
 
+  useEffect(() => {
+  if (status === 'idle') return;
+
+  const timer = setTimeout(() => {
+    setStatus('idle');
+  }, 2500);
+
+  return () => clearTimeout(timer);
+}, [status]);
+
   return (
     <>
-      {isShowingErrorMessage && <ErrorMessage message="Error creating dashboard" />}
-      {isShowingSuccessMessage && <SuccessMessage message="Dashboard created successfully!" />}
+      {status === "error" && <ErrorMessage message="Error creating dashboard" />}
+      {status === "success" && <SuccessMessage message="Dashboard created successfully!" />}
       <form onSubmit={handleSubmit(onSubmitHandler)}>
-      <div>
-        <label htmlFor="title">Dashboard title</label>
-        <br />
-        <input {...register("title", createDashboardValidation.title)} />
-        <p style={{color: "red"}}>{errors?.title?.message}</p>
-      </div>
-      <div>
-        <button type="submit" disabled={isLoading}>Create</button>
-      </div>
-    </form>
+        <div>
+          <label htmlFor="title">Dashboard title</label>
+          <br />
+          <input {...register("title", createDashboardValidation.title)} />
+          <p style={{color: "red"}}>{errors?.title?.message}</p>
+        </div>
+        <div>
+          <button type="submit" disabled={isLoading}>Create</button>
+        </div>
+      </form>
     </>
   )
 };

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useGetDashboardsQuery } from "@/entities/dashboards";
 import { CreateDashboardForm } from "@/features/create-dashboard";
 import { ListItemWithActions } from "@/shared/ui/list/ListItemWithActions";
-import { DeleteDashboardButton } from "@/features/delete-dashboard-button";
+import { DeleteDashboard } from "@/features/delete-dashboard";
 
 export function DashboardsPage() {
     const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery();
@@ -33,7 +33,7 @@ export function DashboardsPage() {
                             <Link to={`/dashboards/${dashboard.id}`}>{dashboard.title}</Link>
                         }
                         actions={
-                            <DeleteDashboardButton id={dashboard.id} />
+                            <DeleteDashboard id={dashboard.id} />
                         }
                     />
                 ))}

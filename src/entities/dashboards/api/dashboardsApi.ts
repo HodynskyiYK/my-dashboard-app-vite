@@ -68,10 +68,7 @@ const dashboardApi = baseApi.injectEndpoints({
                 url: `/dashboards/${dashboardId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: (_result, _error, dashboardId) => [
-                { type: "Dashboard", id: dashboardId },
-                { type: "Dashboard", id: "LIST" },
-            ],
+            invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
         }),
     }),
 });

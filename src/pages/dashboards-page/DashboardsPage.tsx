@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { useGetDashboardsQuery, useDeleteDashboardMutation } from "@/entities/dashboards";
+import { useGetDashboardsQuery } from "@/entities/dashboards";
 import { CreateDashboardForm } from "@/features/create-dashboard";
 import { ListItemWithActions } from "@/shared/ui/list/ListItemWithActions";
+import { DeleteDashboard } from "@/features/delete-dashboard";
 
 export function DashboardsPage() {
     const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery();
-    const [deleteDashboard] = useDeleteDashboardMutation();
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -33,7 +33,7 @@ export function DashboardsPage() {
                             <Link to={`/dashboards/${dashboard.id}`}>{dashboard.title}</Link>
                         }
                         actions={
-                            <button onClick={() => deleteDashboard(dashboard.id)}>Delete</button>
+                            <DeleteDashboard id={dashboard.id} />
                         }
                     />
                 ))}

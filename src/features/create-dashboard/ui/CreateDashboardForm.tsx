@@ -6,6 +6,7 @@ import { SuccessMessage, ErrorMessage } from "@/shared/ui";
 import type { TCreateDashboardStatus } from "../model/types";
 
 import styles from "./CreateDashboardForm.module.css";
+import { Button } from "@/shared/ui/button/Button";
 
 export function CreateDashboardForm() {
   const [status, setStatus] = useState<TCreateDashboardStatus>('idle');
@@ -54,11 +55,7 @@ export function CreateDashboardForm() {
           <p className={styles.error}>{errors?.title?.message}</p>
         </div>
         <div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={isLoading ? styles.buttonDisabled : styles.button}
-          >Create</button>
+          <Button disabled={isLoading}>Create</Button>
         </div>
       </form>
     </>

@@ -1,7 +1,11 @@
+import { Link } from "react-router-dom";
+
 export function Header() {
   return (
     <div>
-      <h1>Main Layout</h1>
+      <h3>
+        <Link to="/">My Dashboard App Logo</Link>
+      </h3>
     </div>
   );
 }

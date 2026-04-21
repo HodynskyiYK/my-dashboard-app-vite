@@ -1,7 +1,8 @@
 export function Footer() {
   return (
     <div>
-      <h1>Footer</h1>
+      <hr />
+      <h3>Footer</h3>
     </div>
   );
 }

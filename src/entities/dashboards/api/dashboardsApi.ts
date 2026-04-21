@@ -26,7 +26,17 @@ const dashboardApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
         }),
+        deleteDashboard: build.mutation<void, string>({
+            query: (dashboardId) => ({
+                url: `/dashboards/${dashboardId}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, dashboardId) => [
+                { type: "Dashboard", id: dashboardId },
+                { type: "Dashboard", id: "LIST" },
+            ],
+        }),
     }),
 });
 
-export const { useGetDashboardsQuery, useCreateDashboardMutation } = dashboardApi;
+export const { useGetDashboardsQuery, useCreateDashboardMutation, useDeleteDashboardMutation } = dashboardApi;

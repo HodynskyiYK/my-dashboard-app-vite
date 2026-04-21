@@ -1,1 +1,0 @@
-export type { TDashboard } from "./dashboard.type";

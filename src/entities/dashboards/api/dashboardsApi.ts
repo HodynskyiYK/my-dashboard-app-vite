@@ -1,11 +1,10 @@
 import { baseApi } from "@/shared/api/baseApi";
-import type { Dashboard } from "@/entities/dashboards";
-import type { TDashboard } from "@/shared/model";
+import type { TDashboard } from "@/entities/dashboards";
 
 
 const dashboardApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getDashboards: build.query<Dashboard[], void>({
+        getDashboards: build.query<TDashboard[], void>({
             query: () => '/dashboards',
             providesTags: (result) =>
                 result
@@ -19,7 +18,7 @@ const dashboardApi = baseApi.injectEndpoints({
                     { type: 'Dashboard', id: 'LIST' }
                 ],
         }),
-        createDashboard: build.mutation<Dashboard, Partial<Dashboard>>({
+        createDashboard: build.mutation<TDashboard, Partial<TDashboard>>({
             query: (newDashboard) => ({
                 url: "/dashboards",
                 method: "POST",
@@ -27,12 +26,12 @@ const dashboardApi = baseApi.injectEndpoints({
             }),
             // invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
             async onQueryStarted(newDashboard, { dispatch, queryFulfilled }) {
+                const tempId = `temp-${Date.now()}`;
                 const patchResult = dispatch(
                     dashboardApi.util.updateQueryData(
                         "getDashboards",
                         undefined,
                         (draft) => {
-                            const tempId = `temp-${Date.now()}`;
                             draft.push({
                                 id: tempId,
                                 title: newDashboard.title || "Untitled Dashboard",
@@ -50,7 +49,7 @@ const dashboardApi = baseApi.injectEndpoints({
                             "getDashboards",
                             undefined,
                             (draft) => {
-                                const index = draft.findIndex(d => d.id.startsWith("temp-"));
+                                const index = draft.findIndex(d => d.id === tempId);
 
                                 if (index !== -1) {
                                     draft[index] = data;
@@ -68,7 +67,7 @@ const dashboardApi = baseApi.injectEndpoints({
                 url: `/dashboards/${dashboardId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: (result, error, dashboardId) => [
+            invalidatesTags: (_result, _error, dashboardId) => [
                 { type: "Dashboard", id: dashboardId },
                 { type: "Dashboard", id: "LIST" },
             ],

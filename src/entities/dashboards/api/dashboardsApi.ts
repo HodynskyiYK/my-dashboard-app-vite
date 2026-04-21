@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { baseApi } from "@/shared/api/baseApi";
 import type { TDashboard } from "@/entities/dashboards";
 
@@ -26,7 +27,7 @@ const dashboardApi = baseApi.injectEndpoints({
             }),
             // invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
             async onQueryStarted(newDashboard, { dispatch, queryFulfilled }) {
-                const tempId = `temp-${Date.now()}`;
+                const tempId = `temp-${nanoid()}`;
                 const patchResult = dispatch(
                     dashboardApi.util.updateQueryData(
                         "getDashboards",

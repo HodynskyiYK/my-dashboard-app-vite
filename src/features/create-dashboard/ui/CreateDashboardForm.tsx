@@ -1,29 +1,43 @@
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { createDashboardValidation, type ICreateDashboardFormValues } from "@/features/create-dashboard";
 import { useCreateDashboardMutation } from "@/entities/dashboards";
+import { SuccessMessage, ErrorMessage } from "@/shared/ui";
 
 export function CreateDashboardForm() {
-  const [createDashboard, { isLoading, isError, isSuccess }] = useCreateDashboardMutation();
+  const [isShowingSuccessMessage, setIsShowingSuccessMessage] = useState<boolean>(false);
+  const [isShowingErrorMessage, setIsShowingErrorMessage] = useState<boolean>(false);
+  const [createDashboard, { isLoading, reset: resetMutation }] = useCreateDashboardMutation();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors }
   } = useForm<ICreateDashboardFormValues>();
+
+
   const onSubmitHandler: SubmitHandler<ICreateDashboardFormValues> = async (data) => {
     try {
       await createDashboard(data).unwrap();
-    reset();
+      reset();
+
+      setIsShowingSuccessMessage(true);
     } catch (error) {
+      setIsShowingErrorMessage(true);
       console.error(error);
+    } finally {
+      setTimeout(() => {
+        setIsShowingSuccessMessage(false);
+        setIsShowingErrorMessage(false);
+        resetMutation();
+      }, 2500);
     }
   };
-  
 
   return (
     <>
-      {isError && <p style={{ color: "red", border: "1px solid red" }}>Error creating dashboard</p>}
-      {isSuccess && <p style={{ color: "green", border: "1px solid green" }}>Dashboard created successfully!</p>}
+      {isShowingErrorMessage && <ErrorMessage message="Error creating dashboard" />}
+      {isShowingSuccessMessage && <SuccessMessage message="Dashboard created successfully!" />}
       <form onSubmit={handleSubmit(onSubmitHandler)}>
       <div>
         <label htmlFor="title">Dashboard title</label>
@@ -37,4 +51,4 @@ export function CreateDashboardForm() {
     </form>
     </>
   )
-}
+};

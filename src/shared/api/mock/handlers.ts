@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 const dashboards = [
   { id: '1', title: 'Sales Dashboard' },
   { id: '2', title: 'Marketing Dashboard' },
+  { id: '3', title: 'Finance Dashboard' },
 ];
 
 export const handlers = [
@@ -21,7 +22,7 @@ export const handlers = [
       ...bodyObj,
     };
 
-    dashboards.push(newDashboard);
+    dashboards.unshift(newDashboard);
 
     return HttpResponse.json(newDashboard, { status: 201 });
   }),

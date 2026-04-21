@@ -3,7 +3,7 @@ import { createDashboardValidation, type ICreateDashboardFormValues } from "@/fe
 import { useCreateDashboardMutation } from "@/entities/dashboards";
 
 export function CreateDashboardForm() {
-  const [createDashboard, { isLoading }] = useCreateDashboardMutation();
+  const [createDashboard, { isLoading, isError, isSuccess }] = useCreateDashboardMutation();
   const {
     register,
     handleSubmit,
@@ -21,7 +21,10 @@ export function CreateDashboardForm() {
   
 
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)}>
+    <>
+      {isError && <p style={{ color: "red", border: "1px solid red" }}>Error creating dashboard</p>}
+      {isSuccess && <p style={{ color: "green", border: "1px solid green" }}>Dashboard created successfully!</p>}
+      <form onSubmit={handleSubmit(onSubmitHandler)}>
       <div>
         <label htmlFor="title">Dashboard title</label>
         <br />
@@ -32,5 +35,6 @@ export function CreateDashboardForm() {
         <button type="submit" disabled={isLoading}>Create</button>
       </div>
     </form>
+    </>
   )
 }

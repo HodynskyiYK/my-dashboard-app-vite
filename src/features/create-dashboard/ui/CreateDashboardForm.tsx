@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { set, useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { createDashboardValidation, type ICreateDashboardFormValues } from "@/features/create-dashboard";
 import { useCreateDashboardMutation } from "@/entities/dashboards";
 import { SuccessMessage, ErrorMessage } from "@/shared/ui";
 import type { TCreateDashboardStatus } from "../model/types";
+
+import styles from "./CreateDashboardForm.module.css";
 
 export function CreateDashboardForm() {
   const [status, setStatus] = useState<TCreateDashboardStatus>('idle');
@@ -40,15 +42,23 @@ export function CreateDashboardForm() {
     <>
       {status === "error" && <ErrorMessage message="Error creating dashboard" />}
       {status === "success" && <SuccessMessage message="Dashboard created successfully!" />}
-      <form onSubmit={handleSubmit(onSubmitHandler)}>
+      <form
+        onSubmit={handleSubmit(onSubmitHandler)}
+        className={styles.form}
+      >
         <div>
-          <label htmlFor="title">Dashboard title</label>
-          <br />
-          <input {...register("title", createDashboardValidation.title)} />
-          <p style={{color: "red"}}>{errors?.title?.message}</p>
+          <input
+            placeholder="Enter dashboard title" {...register("title", createDashboardValidation.title)}
+            className={`${styles.input} ${errors?.title ? styles.error : ""}`}
+          />
+          <p className={styles.error}>{errors?.title?.message}</p>
         </div>
         <div>
-          <button type="submit" disabled={isLoading}>Create</button>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={isLoading ? styles.buttonDisabled : styles.button}
+          >Create</button>
         </div>
       </form>
     </>

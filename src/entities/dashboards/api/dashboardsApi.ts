@@ -6,7 +6,7 @@ import type { TDashboard } from "@/entities/dashboards";
 const dashboardApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         getDashboards: build.query<TDashboard[], void>({
-            query: () => '/dashboards',
+            query: () => '/dashboards?sortBy=createdAt&order=desc',
             providesTags: (result) =>
                 result
                 ? [
@@ -33,7 +33,7 @@ const dashboardApi = baseApi.injectEndpoints({
                         "getDashboards",
                         undefined,
                         (draft) => {
-                            draft.push({
+                            draft.unshift({
                                 id: tempId,
                                 title: newDashboard.title || "Untitled Dashboard",
                                 createdAt: new Date().toISOString(),

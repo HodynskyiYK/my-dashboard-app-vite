@@ -1,5 +1,6 @@
 import { baseApi } from "@/shared/api/baseApi";
 import type { Dashboard } from "@/entities/dashboards";
+import type { TDashboard } from "@/shared/model";
 
 
 const dashboardApi = baseApi.injectEndpoints({
@@ -24,7 +25,43 @@ const dashboardApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: newDashboard,
             }),
-            invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
+            // invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
+            async onQueryStarted(newDashboard, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    dashboardApi.util.updateQueryData(
+                        "getDashboards",
+                        undefined,
+                        (draft) => {
+                            const tempId = `temp-${Date.now()}`;
+                            draft.push({
+                                id: tempId,
+                                title: newDashboard.title || "Untitled Dashboard",
+                                createdAt: new Date().toISOString(),
+                            } as TDashboard);
+                        }
+                    )
+                );
+
+                try {
+                    const { data } = await queryFulfilled;
+
+                    dispatch(
+                        dashboardApi.util.updateQueryData(
+                            "getDashboards",
+                            undefined,
+                            (draft) => {
+                                const index = draft.findIndex(d => d.id.startsWith("temp-"));
+
+                                if (index !== -1) {
+                                    draft[index] = data;
+                                }
+                            }
+                        )
+                    );
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         deleteDashboard: build.mutation<void, string>({
             query: (dashboardId) => ({

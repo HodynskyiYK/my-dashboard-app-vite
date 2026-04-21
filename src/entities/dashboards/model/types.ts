@@ -1,5 +1,5 @@
-export interface Dashboard {
+export type TDashboard = {
     id: string;
     title: string;
-    [key: string]: any;
+    createdAt: string;
 }

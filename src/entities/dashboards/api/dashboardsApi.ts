@@ -1,11 +1,12 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { baseApi } from "@/shared/api/baseApi";
-import type { Dashboard } from "@/entities/dashboards";
+import type { TDashboard } from "@/entities/dashboards";
 
 
 const dashboardApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getDashboards: build.query<Dashboard[], void>({
-            query: () => '/dashboards',
+        getDashboards: build.query<TDashboard[], void>({
+            query: () => '/dashboards?sortBy=createdAt&order=desc',
             providesTags: (result) =>
                 result
                 ? [
@@ -18,20 +19,56 @@ const dashboardApi = baseApi.injectEndpoints({
                     { type: 'Dashboard', id: 'LIST' }
                 ],
         }),
-        createDashboard: build.mutation<Dashboard, Partial<Dashboard>>({
+        createDashboard: build.mutation<TDashboard, Partial<TDashboard>>({
             query: (newDashboard) => ({
                 url: "/dashboards",
                 method: "POST",
                 body: newDashboard,
             }),
-            invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
+            // invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
+            async onQueryStarted(newDashboard, { dispatch, queryFulfilled }) {
+                const tempId = `temp-${nanoid()}`;
+                const patchResult = dispatch(
+                    dashboardApi.util.updateQueryData(
+                        "getDashboards",
+                        undefined,
+                        (draft) => {
+                            draft.unshift({
+                                id: tempId,
+                                title: newDashboard.title || "Untitled Dashboard",
+                                createdAt: new Date().toISOString(),
+                            } as TDashboard);
+                        }
+                    )
+                );
+
+                try {
+                    const { data } = await queryFulfilled;
+
+                    dispatch(
+                        dashboardApi.util.updateQueryData(
+                            "getDashboards",
+                            undefined,
+                            (draft) => {
+                                const index = draft.findIndex(d => d.id === tempId);
+
+                                if (index !== -1) {
+                                    draft[index] = data;
+                                }
+                            }
+                        )
+                    );
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         deleteDashboard: build.mutation<void, string>({
             query: (dashboardId) => ({
                 url: `/dashboards/${dashboardId}`,
                 method: "DELETE",
             }),
-            invalidatesTags: (result, error, dashboardId) => [
+            invalidatesTags: (_result, _error, dashboardId) => [
                 { type: "Dashboard", id: dashboardId },
                 { type: "Dashboard", id: "LIST" },
             ],

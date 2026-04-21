@@ -26,7 +26,7 @@ export function DashboardsPage() {
             <CreateDashboardForm />
             <hr />
             <div>
-                {[...dashboardsData].reverse().map((dashboard) => (
+                {dashboardsData.map((dashboard) => (
                     <ListItemWithActions
                         key={dashboard.id}
                         item={

@@ -86,7 +86,40 @@ const dashboardApi = baseApi.injectEndpoints({
                 method: "PUT",
                 body: data,
             }),
-            invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
+            //invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    dashboardApi.util.updateQueryData(
+                        "getDashboards",
+                        undefined,
+                        (draft) => {
+                            const item = draft.find(d => d.id === arg.id);
+                            if (item) {
+                                Object.assign(item, arg.data);
+                            }
+                        }
+                    )
+                );
+
+                try {
+                    const { data: serverData } = await queryFulfilled;
+
+                    dispatch(
+                        dashboardApi.util.updateQueryData(
+                            "getDashboards",
+                            undefined,
+                            (draft) => {
+                                const index = draft.findIndex(d => d.id === serverData.id);
+                                if (index !== -1) {
+                                    draft[index] = serverData;
+                                }
+                            }
+                        )
+                    );
+                } catch {
+                    patchResult.undo();
+                }
+            }
         }),
     }),
 });

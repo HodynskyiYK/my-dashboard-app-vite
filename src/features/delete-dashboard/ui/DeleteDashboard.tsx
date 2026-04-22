@@ -23,7 +23,7 @@ export function DeleteDashboard({ id }: IDeleteDashboardProps) {
   return (
     <>
       {isError && <ErrorMessage message="Failed to delete dashboard. Please try again." />}
-      <Button onClick={handleDelete} disabled={isLoading}>
+      <Button type="primary" onClick={handleDelete} disabled={isLoading}>
         {isLoading ? "Deleting..." : "Delete"}
       </Button>
     </>

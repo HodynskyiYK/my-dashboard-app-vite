@@ -3,6 +3,7 @@ import { useGetDashboardsQuery } from "@/entities/dashboards";
 import { CreateDashboardForm } from "@/features/create-dashboard";
 import { ListItemWithActions } from "@/shared/ui/list/ListItemWithActions";
 import { DeleteDashboard } from "@/features/delete-dashboard";
+import { EditDashboard } from "@/features/etid-dashboard";
 
 export function DashboardsPage() {
     const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery();
@@ -32,9 +33,10 @@ export function DashboardsPage() {
                         item={
                             <Link to={`/dashboards/${dashboard.id}`}>{dashboard.title}</Link>
                         }
-                        actions={
-                            <DeleteDashboard id={dashboard.id} />
-                        }
+                        actions={[
+                            <EditDashboard id={dashboard.id} />,
+                            <DeleteDashboard id={dashboard.id} />,
+                        ]}
                     />
                 ))}
             </div>

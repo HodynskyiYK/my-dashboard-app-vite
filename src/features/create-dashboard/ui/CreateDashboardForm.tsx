@@ -55,7 +55,7 @@ export function CreateDashboardForm() {
           <p className={styles.error}>{errors?.title?.message}</p>
         </div>
         <div>
-          <Button disabled={isLoading}>Create</Button>
+          <Button disabled={isLoading} type="primary">Create</Button>
         </div>
       </form>
     </>

@@ -2,14 +2,15 @@ import styles from "./Button.module.css";
 
 interface ButtonProps {
     children: React.ReactNode;
+    type: "primary" | "secondary" | "danger";
     onClick?: () => void;
     disabled?: boolean;
 }
 
-export function Button({ children, onClick, disabled }: ButtonProps) {
+export function Button({ children, onClick, disabled, type }: ButtonProps) {
     return (
         <button
-            className={styles.btn}
+            className={`${styles.btn} ${styles[`btn-${type}`]}`}
             onClick={onClick}
             disabled={disabled}
         >

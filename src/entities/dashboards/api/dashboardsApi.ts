@@ -19,6 +19,10 @@ const dashboardApi = baseApi.injectEndpoints({
                     { type: 'Dashboard', id: 'LIST' }
                 ],
         }),
+        getDashboardById: build.query<TDashboard, string>({
+            query: (id) => `/dashboards/${id}`,
+            providesTags: (_result, _error, id) => [{ type: 'Dashboard', id }],
+        }),
         createDashboard: build.mutation<TDashboard, Partial<TDashboard>>({
             query: (newDashboard) => ({
                 url: "/dashboards",
@@ -70,7 +74,21 @@ const dashboardApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "Dashboard", id: "LIST" }],
         }),
+        updateDashboard: build.mutation<TDashboard, Partial<TDashboard> & Pick<TDashboard, 'id'>>({
+            query: ({ id, ...updatedFields }) => ({
+                url: `/dashboards/${id}`,
+                method: "PUT",
+                body: updatedFields,
+            }),
+            invalidatesTags: (_result, _error, { id }) => [{ type: "Dashboard", id }],
+        }),
     }),
 });
 
-export const { useGetDashboardsQuery, useCreateDashboardMutation, useDeleteDashboardMutation } = dashboardApi;
+export const {
+    useGetDashboardsQuery,
+    useGetDashboardByIdQuery,
+    useCreateDashboardMutation,
+    useDeleteDashboardMutation,
+    useUpdateDashboardMutation
+} = dashboardApi;

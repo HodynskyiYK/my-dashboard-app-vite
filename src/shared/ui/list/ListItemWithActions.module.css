@@ -5,3 +5,12 @@
     padding: 8px;
     border-bottom: 1px solid #ccc;
 }
+
+.item {
+    flex: 1;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}

@@ -34,8 +34,8 @@ export function DashboardsPage() {
                             <Link to={`/dashboards/${dashboard.id}`}>{dashboard.title}</Link>
                         }
                         actions={[
-                            <EditDashboard id={dashboard.id} />,
-                            <DeleteDashboard id={dashboard.id} />,
+                            <EditDashboard dashboard={dashboard} />,
+                            <DeleteDashboard dashboard={dashboard} />,
                         ]}
                     />
                 ))}

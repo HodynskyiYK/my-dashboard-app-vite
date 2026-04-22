@@ -1,12 +1,12 @@
-import { useDeleteDashboardMutation } from "@/entities/dashboards";
+import { useDeleteDashboardMutation, type TDashboard } from "@/entities/dashboards";
 import { Button } from "@/shared/ui/button";
 import { ErrorMessage } from "@/shared/ui/error-message";
 
 interface IDeleteDashboardProps {
-  id: string;
+  dashboard: TDashboard;
 }
 
-export function DeleteDashboard({ id }: IDeleteDashboardProps) {
+export function DeleteDashboard({ dashboard }: IDeleteDashboardProps) {
   const [deleteDashboard, { isLoading, isError }] = useDeleteDashboardMutation();
 
   const handleDelete = async () => {
@@ -14,7 +14,7 @@ export function DeleteDashboard({ id }: IDeleteDashboardProps) {
     if (!confirmDelete) return;
 
     try {
-      await deleteDashboard(id).unwrap();
+      await deleteDashboard(dashboard.id).unwrap();
     } catch (e) {
       console.error(e);
     }

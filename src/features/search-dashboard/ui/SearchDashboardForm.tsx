@@ -6,9 +6,10 @@ import { useDebounce } from "@/shared/hooks";
 interface ISearchDashboardFormProps {
   searchValue: string;
   setSearch: SetURLSearchParams;
+  currentPage: number;
 }
 
-export function SearchDashboardForm({ searchValue, setSearch }: ISearchDashboardFormProps) {
+export function SearchDashboardForm({ searchValue, setSearch, currentPage }: ISearchDashboardFormProps) {
   const [inputValue, setInputValue] = useState(searchValue);
   const debouncedSearch = useDebounce(inputValue, 500);
 
@@ -23,7 +24,7 @@ export function SearchDashboardForm({ searchValue, setSearch }: ISearchDashboard
   useEffect(() => {
     setSearch({
       search: debouncedSearch,
-      page: '1',
+      page: currentPage.toString(),
     }, { replace: true });
   }, [debouncedSearch, setSearch]);
 

@@ -6,19 +6,30 @@ import { ListItemWithActions } from "@/shared/ui/list/ListItemWithActions";
 import { DeleteDashboard } from "@/features/delete-dashboard";
 import { EditDashboard } from "@/features/edit-dashboard";
 import { SearchDashboardForm } from "@/features/search-dashboard";
+import { Pagination } from "@/features/pagination";
+
+const LIMIT_PER_PAGE = 10;
 
 export function DashboardsPage() {
     const [searchParams, setParams] = useSearchParams();
     const search = searchParams.get('search') || '';
     
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const { data: dashboardsData, error, isLoading } = useGetDashboardsQuery({ search, page });
+    const page = Number(searchParams.get('page') ?? 1);
+    const { data: dashboardsData, error, isLoading, isFetching } = useGetDashboardsQuery({ search, page });
+
+    const pageChangeHandler = (newPage: number) => {
+        setParams({ search, page: String(newPage) }, { replace: true });
+    };
 
     useEffect(() => {
+        if (dashboardsData?.length === 0 && page > 1) {
+            setParams({ search, page: String(page - 1) }, { replace: true });
+        }
+
         if (error && !dashboardsData) {
             setParams({ search: '', page: '1' }, { replace: true });
         }
-    }, [error, dashboardsData, setParams]);
+    }, [error, dashboardsData, setParams, search, page]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -32,8 +43,15 @@ export function DashboardsPage() {
         <div>
             <h1>Dashboards</h1>
             <hr />
-            <SearchDashboardForm searchValue={search} setSearch={setParams} />
+            <SearchDashboardForm
+                searchValue={search}
+                setSearch={setParams}
+                currentPage={page}
+            />
             <hr />
+            {isFetching && (
+                <div>Updating...</div>
+            )}
             {!dashboardsData?.length ? (
                 <div>
                     <h4>No results found</h4>
@@ -54,6 +72,12 @@ export function DashboardsPage() {
                     ))}
                 </div>
             )}
+            <hr />
+            <Pagination
+                page={page}
+                hasNext={!!dashboardsData && dashboardsData.length === LIMIT_PER_PAGE}
+                onChange={pageChangeHandler}
+            />
             <hr />
             <CreateDashboardForm />
         </div>

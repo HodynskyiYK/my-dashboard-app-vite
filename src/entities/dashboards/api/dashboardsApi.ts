@@ -8,7 +8,7 @@ const dashboardApi = baseApi.injectEndpoints({
             TDashboard[],
             { search?: string; page?: number }
         >({
-            query: ({ search = '', page = 1 }) => `/dashboards?sortBy=createdAt&order=desc&search=${search}&page=${page}`,
+            query: ({ search = '', page = 1 }) => `/dashboards?sortBy=createdAt&order=desc&search=${search}&page=${page}&limit=10`,
             providesTags: (result) =>
                 result
                 ? [
